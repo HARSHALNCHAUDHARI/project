@@ -1,4 +1,4 @@
-                                                  **Stock Market Learning Portal**
+                                              **Stock Market Learning Portal**
                                                                           
 Overview:
 The Stock Market Learning Portal is a comprehensive educational platform aimed at helping users learn about the stock market, from basic concepts to advanced trading strategies. 
