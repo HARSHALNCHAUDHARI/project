@@ -35,27 +35,6 @@ Setup Instructions
   http://127.0.0.1:5000
 
 
-File Structure:
-
-stock-market-learning-portal/
-│
-├── app.py                 # Main Flask application
-├── templates/             # HTML templates for the web pages
-│   ├── index.html         # Landing page
-│   ├── login.html         # Login page
-│   ├── signup.html        # Signup page
-│   ├── profile.html       # User profile page
-│   └── ...                # Other pages (e.g., resources, learning sections)
-│
-├── static/                # Static files (CSS, images, JavaScript)
-│   ├── css/               # Custom CSS files
-│   ├── images/            # Profile images, icons
-│   └── js/                # JavaScript files
-│
-├── requirements.txt       # List of required Python packages
-├── README.md              # This file
-└── database.db            # SQLite database for storing user data
-
 
 
 How It Works: 
