@@ -24,7 +24,7 @@ Installation:
 
 Setup Instructions:
 1. Clone this repository to your local machine:
-  git clone https://github.com/HARSHALCHAUDHARI/Project.git
+  git clone [https://github.com/HARSHALCHAUDHARI/Project.git](https://github.com/HARSHALNCHAUDHARI/Project.git)
 2. Navigate to the project folder:
   cd stock-market-learning-portal
 3. Install the required Python dependencies:
