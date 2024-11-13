@@ -35,6 +35,18 @@
             font-size: 2.5em;
             animation: fadeIn 1s ease-in-out;
         }
+        header .login-btn {
+            width: 100%;
+            padding: 10px 10px;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 20px;
+        }
 
         nav a {
             color: #4caf50;
@@ -61,6 +73,7 @@
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.5);
             transition: left 0.3s ease;
             z-index: 1000;
+            
         }
 
         .sidebar.active {
@@ -91,7 +104,7 @@
 
         .sidebar .logout-btn {
             width: 100%;
-            padding: 10px 0;
+            padding: 10px 10px;
             border: none;
             background-color: #4caf50;
             color: white;
@@ -99,7 +112,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin-top: 20px;
+            margin-top: 20px;   
+            
         }
 
         .sidebar .logout-btn:hover {
@@ -174,14 +188,15 @@
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <div class="profile">
-            <img src="path-to-dp.jpg" alt="Profile Picture">
+            <i class='far fa-user-circle' style='font-size:36px'alt="Profile Picture"></i>
             <p id="username">{{ user['username'] if user else 'Guest' }}</p>
         </div>
         <div class="profile-info">
             {% if user %}
-                <p>Email: {{ user['username'] }}@example.com</p>
+                <p>Email: {{ user['username'] }}@gmail.com</p>
                 <p>Phone: (+91) {{ user['mobile'] }}</p>
-                <a href="/logout" class="logout-btn">Logout</a>
+        </br>
+                <a style="margin-left:80px" href="/logout" class="logout-btn">Logout</a>
             {% else %}
                 <p><a href="/login" class="logout-btn">Login</a></p>
             {% endif %}
@@ -190,12 +205,14 @@
 
     <header>
         <h1>Stock Trading Dashboard</h1>
+        <p><a style="margin-left:1200px;"href="/login" class="login-btn">Login</a></p>
         <nav>
             <a href="/">Home</a>
             <a href="/prediction">Predictions</a>
             <a href="/learning">Learning</a>
             <a href="#about">About</a>
             <a href="#contact">Contact</a>
+            
         </nav>
     </header>
 

@@ -122,8 +122,8 @@ def home():
         username = session.get('username')
         conn = get_db_connection()
         user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
-        conn.close()
-        return render_template('index.html', user=user)  # Pass user to the template
+        # conn.close()
+        return render_template('index.html', user=user)
     return render_template('index.html')  # If not logged in, render without user info
 
 # Route to handle stock prediction
@@ -137,7 +137,11 @@ def prediction():
 @app.route('/learning')
 def learning():
     if 'logged_in' in session:
-        return render_template('learning.html')
+        username = session.get('username')
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        conn.close()
+        return render_template('learning.html', user=user)
     return redirect(url_for('login'))
 
 # Route to fetch stock data and make predictions
@@ -204,4 +208,4 @@ def fetch_data():
 
 # Run the app
 if __name__ == '__main__':
-    app.run(port=5001, debug=True)
+    app.run(port=5000, debug=True)
