@@ -1,41 +1,42 @@
+import sqlite3
 import numpy as np
 import pandas as pd
 from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 import yfinance as yf
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import load_model
-import os
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Use a strong secret key
 
-# In-memory user database for demonstration (replace with a real database for production)
-users = {}
+# SQLite Database connection
+def get_db_connection():
+    conn = sqlite3.connect('users.db')
+    conn.row_factory = sqlite3.Row  # This allows us to access columns by name
+    return conn
 
-# Load pre-trained Keras model
-try:
-    model = load_model('/Users/seflame/Desktop/Project/keras_model.h5')
-except Exception as e:
-    print(f"Error loading model: {e}")
+# Route to create the database and user table (if not already created)
+def create_db():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    # Create the users table if it doesn't exist
+    cursor.execute('''
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE NOT NULL,
+        password TEXT NOT NULL,
+        mobile TEXT NOT NULL
+    )
+    ''')
+    conn.commit()
+    conn.close()
 
-@app.route('/')
-def home():
-    return render_template('index.html')
+# Call create_db to make sure the table is created when the app starts
+create_db()
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form.get('username')
-        password = request.form.get('password')
-
-        if username in users and users[username]['password'] == password:
-            session['logged_in'] = True
-            return redirect(url_for('learning'))  # Redirect to learning page after login
-        else:
-            return render_template('login.html', error='Invalid credentials.')
-
-    return render_template('login.html')
-
+# Route to handle user signup
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
@@ -43,33 +44,103 @@ def signup():
         password = request.form.get('password')
         mobile = request.form.get('mobile')
 
-        if username in users:
+        # Hash the password before storing it
+        hashed_password = generate_password_hash(password)
+
+        # Check if username already exists in the database
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        
+        if user:
+            conn.close()
             return render_template('signup.html', error='Username already exists.')
 
-        # Save the new user
-        users[username] = {'password': password, 'mobile': mobile}
+        # Insert new user with hashed password into the database
+        conn.execute('INSERT INTO users (username, password, mobile) VALUES (?, ?, ?)', 
+                     (username, hashed_password, mobile))
+        conn.commit()
+        conn.close()
+
         return redirect(url_for('login'))
 
     return render_template('signup.html')
 
+
+# Route to handle the user dashboard (Display username and user details)
+@app.route('/dashboard')
+def dashboard():
+    if 'logged_in' not in session:
+        return redirect(url_for('login'))  # Redirect to login page if not logged in
+    
+    # Get the current user's username from the session
+    username = session.get('username')
+    
+    # Query the database to get user details
+    conn = get_db_connection()
+    user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+    conn.close()
+
+    if user:
+        # Pass the user details to the template
+        return render_template('index.html', user=user)
+    else:
+        return redirect(url_for('login'))  # Redirect if user not found
+
+
+# Route to handle user login
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+
+        # Query database to check if user exists and password matches
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        conn.close()
+
+        if user and check_password_hash(user['password'], password):  # Compare hashed passwords
+            session['logged_in'] = True
+            session['username'] = username  # Store the username in session
+            return redirect(url_for('home'))  # Redirect to home page after successful login
+        else:
+            return render_template('login.html', error='Invalid credentials.')
+
+    return render_template('login.html')
+
+# Route to handle logout
 @app.route('/logout')
 def logout():
     session.pop('logged_in', None)
+    session.pop('username', None)  # Clear the username from session
     return redirect(url_for('home'))
 
+# Home route
+@app.route('/')
+def home():
+    if 'logged_in' in session:
+        username = session.get('username')
+        conn = get_db_connection()
+        user = conn.execute('SELECT * FROM users WHERE username = ?', (username,)).fetchone()
+        conn.close()
+        return render_template('index.html', user=user)  # Pass user to the template
+    return render_template('index.html')  # If not logged in, render without user info
+
+# Route to handle stock prediction
 @app.route('/prediction')
 def prediction():
     if 'logged_in' in session:
         return render_template('prediction.html')
     return redirect(url_for('login'))
 
+# Route to handle learning page
 @app.route('/learning')
 def learning():
-    # Ensure the user is logged in to access the learning page
     if 'logged_in' in session:
         return render_template('learning.html')
     return redirect(url_for('login'))
 
+# Route to fetch stock data and make predictions
 @app.route('/fetch-data', methods=['POST'])
 def fetch_data():
     data = request.json
@@ -113,6 +184,7 @@ def fetch_data():
     x_test, y_test = np.array(x_test), np.array(y_test)
     
     try:
+        model = load_model('/Users/seflame/Desktop/Project/keras_model.h5')
         y_predicted = model.predict(x_test)
     except Exception as e:
         return jsonify({'error': f"Prediction error: {str(e)}"}), 500
@@ -130,5 +202,6 @@ def fetch_data():
         'statistics': stats
     })
 
+# Run the app
 if __name__ == '__main__':
     app.run(port=5001, debug=True)
