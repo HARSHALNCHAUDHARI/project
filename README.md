@@ -76,7 +76,6 @@ Acknowledgments:
   * Flask: For simplifying the development of the backend.
 
 Screenshots: 
-![image](https://github.com/user-attachments/assets/eaff6f92-6ae8-43d2-af38-c68906a1c642)
 
 ![image](https://github.com/user-attachments/assets/35f92cc1-8e61-434b-af74-866e7fa516b7)
 
