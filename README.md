@@ -76,4 +76,36 @@ Acknowledgments:
   * Flask: For simplifying the development of the backend.
 
 Screenshots: 
-![image](https://github.com/user-attachments/assets/9a38d828-f7fc-461a-808f-3a83cab2080a)
+![image](https://github.com/user-attachments/assets/eaff6f92-6ae8-43d2-af38-c68906a1c642)
+
+![image](https://github.com/user-attachments/assets/35f92cc1-8e61-434b-af74-866e7fa516b7)
+
+![image](https://github.com/user-attachments/assets/9c504886-3c36-433d-8eee-b2c4e35141aa)
+
+![image](https://github.com/user-attachments/assets/190c66fd-f363-4854-9df0-645bd780ffcb)
+
+![image](https://github.com/user-attachments/assets/9a618c28-d0f9-476e-b05c-75b59d4b2faf)
+
+![image](https://github.com/user-attachments/assets/6691b911-cdf2-40a0-9288-0191607ec12e)
+
+![image](https://github.com/user-attachments/assets/01cd951b-41d8-44d6-99cb-8aa5341ceef1)
+
+![image](https://github.com/user-attachments/assets/b16cf44b-bc71-4d90-9cda-462c095c7cdc)
+
+![image](https://github.com/user-attachments/assets/08374fac-d1bf-423b-b713-13b3b53056f5)
+
+![image](https://github.com/user-attachments/assets/828abf06-b056-4102-8e3d-2a1b1e07da20)
+
+![image](https://github.com/user-attachments/assets/35061146-8c90-49bf-b77d-1a130bfdfa79)
+
+![image](https://github.com/user-attachments/assets/eb86dc44-199c-4181-a99e-422eaeda0164)
+
+
+
+
+
+
+
+
+
+
